@@ -34,4 +34,10 @@ class UserRepository {
     {
         $user->tokens()->delete();
     }
+
+    public function changePassword(String $password, User $user)
+    {
+        $user->password = bcrypt($password);
+        $user->save();
+    }
 }

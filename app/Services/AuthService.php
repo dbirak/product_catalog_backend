@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -65,6 +66,14 @@ class AuthService {
         {
             throw $e;
         }
+    }
+
+    public function changeUserPassword(ChangePasswordRequest $request, User $user)
+    {
+        if(!$this->userRepository->comparePassword($request['obecne hasło'], $user)) throw new Exception("Niepoprawne obecne hasło!");
+        $this->userRepository->changePassword($request['nowe hasło'], $user);
+
+        return $res = ['message' => 'Hasło zostało zmienione!'];
     }
     
 } 
