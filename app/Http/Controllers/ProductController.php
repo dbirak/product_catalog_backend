@@ -19,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $res = $this->productService->getAllProducts();
+        return response($res, 200);
     }
 
     /**

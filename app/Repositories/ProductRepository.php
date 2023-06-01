@@ -14,6 +14,11 @@ class ProductRepository {
         $this->product = $product;
     }
 
+    public function getAll()
+    {
+        return $this->product->Paginate(2);
+    }
+
     public function create(ProductRequest $request)
     {
         $product = new Product(); 

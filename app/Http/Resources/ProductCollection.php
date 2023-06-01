@@ -17,7 +17,15 @@ class ProductCollection extends ResourceCollection
         return [
             'data' => $this->collection,
             'links' => [
-                'self' => 'link-value',
+                'self' => url()->current(),
+                'next' => $this->nextPageUrl(),
+                'prev' => $this->previousPageUrl(),
+            ],
+            'meta' => [
+                'current_page' => $this->currentPage(),
+                'last_page' => $this->lastPage(),
+                'per_page' => $this->perPage(),
+                'total' => $this->total(),
             ],
         ];
     }

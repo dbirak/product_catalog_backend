@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\CategoryResource;
 use App\Repositories\CategoryRepository;
 use Exception;
@@ -19,7 +20,7 @@ class CategoryService {
 
     public function getAllCategories()
     {
-        return CategoryResource::collection($this->categoryRepository->getAll());
+        return new CategoryCollection($this->categoryRepository->getAll());
     }
 
     public function createCategory(CategoryRequest $request)

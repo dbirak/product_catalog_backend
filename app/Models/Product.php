@@ -17,6 +17,8 @@ class Product extends Model
         'category_id',
         'user_id',
     ];
+    
+    protected $appends = ['pdf_name', 'image_name'];
 
     public function category()
     {
