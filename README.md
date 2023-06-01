@@ -1,6 +1,7 @@
 # Instalacja
 - Należy utworzyć nową bazę MySQL `catalog` z kodowaniem `uff8mb4_polish_ci`
 - Należy sklonować repozytorium
+- Zmienić nazwę pliku `.env.exapmle` na `.env`
 - Wykonać komendy:
   - `composer install --no-interaction`
   - `php artisan storage:link`
