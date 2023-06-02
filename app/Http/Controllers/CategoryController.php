@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Services\CategoryService;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
@@ -48,7 +49,16 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try
+        {
+            $res = $this->categoryService->showCategory($id);
+            return response($res, 200);
+        }
+        catch(Exception $e)
+        {
+            if($e instanceof Exception)
+                    return response(['message' => $e->getMessage()], 404);
+        }
     }
 
     /**
@@ -88,7 +98,9 @@ class CategoryController extends Controller
         }
         catch(Exception $e)
         {
-            if($e instanceof Exception)
+            if($e instanceof QueryException)
+                    return response(['message' => $e->getMessage()], 409);
+            else
                     return response(['message' => $e->getMessage()], 404);
         }
     }

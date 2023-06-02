@@ -47,5 +47,13 @@ class CategoryService {
 
         $this->categoryRepository->delete($category);
     }
+
+    public function showCategory(string $id)
+    {
+        $category = $this->categoryRepository->findById($id);
+        if(!$category) throw new Exception("Nie znaleziono zasobu!");
+
+        return new CategoryResource($category);
+    }
     
 }
