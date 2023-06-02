@@ -5,7 +5,6 @@
 - Wykonać komendy:
   - `composer install --no-interaction`
   - `php artisan storage:link`
-  - `composer install --no-interaction`
   - `php artisan migrate:refresh --seed`
   - `php artisan serve`
 
