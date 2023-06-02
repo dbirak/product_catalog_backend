@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 
 class ProductRepository {
 
@@ -16,7 +17,23 @@ class ProductRepository {
 
     public function getAll()
     {
-        return $this->product->Paginate(2);
+        return $this->product->Paginate(18);
+    }
+
+    public function findById(string $id)
+    {
+        return $this->product::where('id', $id)->first();
+    }
+
+    public function delete(Product $product)
+    {
+        if(Storage::exists('public/pdf/'.$product->pdf_name))
+            Storage::delete('public/pdf/'.$product->pdf_name);
+
+        if(Storage::exists('public/images/'.$product->image_name))
+            Storage::delete('public/images/'.$product->image_name);
+        
+        $product->delete();
     }
 
     public function create(ProductRequest $request)
@@ -45,6 +62,21 @@ class ProductRepository {
         $product->save();
 
         return $product;
+    }
+
+    public function findByNameAndCategory(string $name, int $category)
+    {
+        return $product = $this->product::where('name', 'LIKE', '%'.$name.'%')->where('category_id', $category)->paginate(18);
+    }
+
+    public function findByName(string $name)
+    {
+        return $product = $this->product::where('name', 'LIKE', '%'.$name.'%')->paginate(18);
+    }
+
+    public function findByCategory(int $category)
+    {
+        return $product = $this->product::where('category_id', $category)->paginate(18);
     }
 
 }

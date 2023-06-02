@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Http\Requests\SerachProductRequest;
 use App\Services\ProductService;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -45,7 +48,16 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try
+        {
+            $res = $this->productService->showProduct($id);
+            return response($res, 200);
+        }
+        catch(Exception $e)
+        {
+            if($e instanceof Exception)
+                    return response(['message' => $e->getMessage()], 404);
+        }
     }
 
     /**
@@ -69,6 +81,30 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try
+        {
+            $this->productService->deleteProduct($id);
+            return response([], 204);
+        }
+        catch(Exception $e)
+        {
+            if($e instanceof QueryException)
+                    return response(['message' => $e->getMessage()], 409);
+            else
+                    return response(['message' => $e->getMessage()], 404);
+        }
+    }
+
+    public function serach(SerachProductRequest $request)
+    {
+        try
+        {
+            $res = $this->productService->serachProduct($request);
+            return response($res, 200);
+        }
+        catch(Exception $e)
+        {
+            return response(['message' => $e->getMessage()], 404);
+        }
     }
 }
