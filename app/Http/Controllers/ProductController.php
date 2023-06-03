@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\SerachProductRequest;
 use App\Services\ProductService;
@@ -71,9 +72,18 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(EditProductRequest $request, string $id)
     {
-        //
+        try
+        {
+            $res = $this->productService->updateProduct($request, $id);
+            return response($res, 200);
+        }
+        catch(Exception $e)
+        {
+            if($e instanceof Exception)
+                    return response(['message' => $e->getMessage()], 404);
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
@@ -76,7 +77,40 @@ class ProductRepository {
 
     public function findByCategory(int $category)
     {
-        return $product = $this->product::where('category_id', $category)->paginate(18);
+        return $product = $this->product::where('category_id', $category)->paginate(18);    
+    }
+
+    public function update(EditProductRequest $request, Product $product)
+    {
+        $product->name = $request['nazwa'];
+        $product->code_qr = $request['kod'];
+        $product->category_id = $request['kategoria'];
+
+        if ($request->has('zdjęcie')) {
+            if(Storage::exists('public/images/'.$product->image_name))
+                Storage::delete('public/images/'.$product->image_name);
+
+            $image = $request['zdjęcie'];
+            $path2 = $image->store('public/images');
+            $filename_image = $image->hashName();
+
+            $product->image_name = $filename_image;
+        }
+
+        if ($request->has('pdf')) {
+            if(Storage::exists('public/pdf/'.$product->pdf_name))
+                Storage::delete('public/pdf/'.$product->pdf_name);
+
+            $pdf = $request->file('pdf');
+            $path = $pdf->store('public/pdf');
+            $filename_pdf = $pdf->hashName();
+
+            $product->pdf_name = $filename_pdf;
+        }
+
+        $product->save();
+
+        return $product;
     }
 
 }

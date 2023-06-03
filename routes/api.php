@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum') ->group(function () {
     Route::post('/auth/password', [AuthController::class, 'changePassword']);
 
     Route::post('/product', [ProductController::class, 'store']);
+    Route::post('/product/{id}', [ProductController::class, 'update']);
     Route::delete('/product/{id}', [ProductController::class, 'destroy']);
 
     Route::post('/category', [CategoryController::class, 'store']);

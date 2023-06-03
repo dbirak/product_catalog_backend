@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class ProductRequest extends FormRequest
+class EditProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,11 +22,13 @@ class ProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        $productId = $this->route('id');
+
         return [
-            'nazwa' => 'required|max:50|string|unique:products,name',
+            'nazwa' => 'required|max:50|string|unique:products,name,'.$productId,
             'kod' => 'required|max:100|string',
-            'zdjęcie' => 'required|image',
-            'pdf' => 'required|mimes:pdf|max:4096',
+            'zdjęcie' => 'image',
+            'pdf' => 'mimes:pdf|max:4096',
             'kategoria' => 'required|integer|exists:categories,id',
         ];
     }

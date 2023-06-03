@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\ProductRequest;
 use App\Http\Requests\SerachProductRequest;
 use App\Http\Resources\ProductCollection;
@@ -71,6 +72,16 @@ class ProductService {
         if(!$product) throw new Exception("Nie znaleziono zasobu!");
 
         return new ProductResource($product);
-    }   
+    }
+    
+    public function updateProduct(EditProductRequest $request, string $id)
+    {
+        $product = $this->productRepository->findById($id);
+        if(!$product) throw new Exception("Nie znaleziono zasobu!");
+
+        $updatedProduct = $this->productRepository->update($request, $product);
+
+        return new ProductResource($updatedProduct);
+    }
     
 }
