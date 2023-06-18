@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('auth/forgot-password', [AuthController::class, 'resetPassword']);
 
 Route::get('/product', [ProductController::class, 'index']);
 Route::post('/product/serach', [ProductController::class, 'serach']);
@@ -34,6 +35,7 @@ Route::get('/product/{id}', [ProductController::class, 'show']);
 
 Route::get('/category', [CategoryController::class, 'index']);
 Route::get('/category/{id}', [CategoryController::class, 'show']);
+
 
 Route::resource('file', FileController::class);
 

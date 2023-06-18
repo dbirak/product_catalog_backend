@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\EmailRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -10,6 +11,9 @@ use App\Repositories\UserRepository;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use App\Http\Mail\CustomMail;
 
 class AuthService {
 
@@ -74,6 +78,23 @@ class AuthService {
         $this->userRepository->changePassword($request['nowe hasło'], $user);
 
         return $res = ['message' => 'Hasło zostało zmienione!'];
+    }
+
+    public function forgotPassword(EmailRequest $request)
+    {
+        $user = $this->userRepository->findResetPasswordUsers($request['email']);
+
+        if($user) $this->userRepository->deleteResetPasswordUser($user);
+
+        $token = Str::random(64);
+
+        $this->userRepository->createForgotPasswordToken($token, $request['email']);
+
+        $resetUrl = "https://kmgrom.dd1test.pl/reset-password/".$token;
+
+        Mail::to($request['email'])->send(new CustomMail($resetUrl));
+
+        return $res = ['message' => "Link resetujący został wysłany na maila"];
     }
     
 } 

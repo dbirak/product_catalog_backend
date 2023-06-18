@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\EmailRequest;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthService;
 use Exception;
@@ -45,17 +46,30 @@ class AuthController extends Controller
         }
     }
 
-        public function changePassword(ChangePasswordRequest $request)
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        try 
         {
-            try 
-            {
-                $res = $this->authService->changeUserPassword($request, $request->user());
-                return response($res, 200);
-            } 
-            catch(Exception $e)
-            {
-                if($e instanceof Exception)
-                    return response(['message' => $e->getMessage()], 400);
-            }
+            $res = $this->authService->changeUserPassword($request, $request->user());
+            return response($res, 200);
+        } 
+        catch(Exception $e)
+        {
+            if($e instanceof Exception)
+                return response(['message' => $e->getMessage()], 400);
         }
+    }
+
+    public function resetPassword(EmailRequest $request)
+    {
+        try
+        {
+            $res = $this->authService->forgotPassword($request);
+            return response($res, 200);
+        }
+        catch(Exception $e)
+        {
+            throw $e;
+        }
+    }
 }
