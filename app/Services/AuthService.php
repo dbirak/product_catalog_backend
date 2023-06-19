@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Http\Mail\CustomMail;
+use App\Http\Requests\ResetPasswordRequest;
 
 class AuthService {
 
@@ -95,6 +96,23 @@ class AuthService {
         Mail::to($request['email'])->send(new CustomMail($resetUrl));
 
         return $res = ['message' => "Link resetujący został wysłany na maila"];
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $user = $this->userRepository->findByResetToken($request['token']);
+
+        if(!$user) throw new Exception("Nie znaleziono użytkownika!");
+
+        $user = $this->userRepository->findByEmail($user->email);
+
+        $this->userRepository->changePassword($request['nowe hasło'], $user);
+
+        $user = $this->userRepository->findResetPasswordUsers($user->email);
+
+        if($user) $this->userRepository->deleteResetPasswordUser($user);
+
+        return $res = ['message' => 'Hasło zostało zmienione!'];
     }
     
 } 

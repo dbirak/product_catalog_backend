@@ -59,4 +59,9 @@ class UserRepository {
             'token' => $token
         ]);
     }
+
+    public function findByResetToken(string $token)
+    {
+        return DB::table('password_reset_tokens')->where('token', $token)->first();
+    }
 }

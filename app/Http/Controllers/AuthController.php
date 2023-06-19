@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\EmailRequest;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\ResetPasswordRequest;
 use App\Services\AuthService;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
@@ -60,7 +61,7 @@ class AuthController extends Controller
         }
     }
 
-    public function resetPassword(EmailRequest $request)
+    public function forgotPassword(EmailRequest $request)
     {
         try
         {
@@ -70,6 +71,20 @@ class AuthController extends Controller
         catch(Exception $e)
         {
             throw $e;
+        }
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        try
+        {
+            $res = $this->authService->resetPassword($request);
+            return response($res, 200);
+        }
+        catch(Exception $e)
+        {
+            if($e instanceof Exception)
+                return response(['message' => $e->getMessage()], 404);
         }
     }
 }
