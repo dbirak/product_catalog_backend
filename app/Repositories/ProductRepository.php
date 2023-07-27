@@ -41,7 +41,7 @@ class ProductRepository {
     {
         $product = new Product(); 
         $product->name = $request['nazwa'];
-        $product->code_qr = $request['kod'];
+        $product->code_qr = $request['opis'];
         $product->category_id = $request['kategoria'];
 
         $pdf = $request->file('pdf');
@@ -83,7 +83,7 @@ class ProductRepository {
     public function update(EditProductRequest $request, Product $product)
     {
         $product->name = $request['nazwa'];
-        $product->code_qr = $request['kod'];
+        $product->code_qr = $request['opis'];
         $product->category_id = $request['kategoria'];
 
         if ($request->has('zdjęcie')) {

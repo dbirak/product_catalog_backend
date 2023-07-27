@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('image_name');
             $table->string('pdf_name');
-            $table->string('code_qr');
+            $table->string('code_qr',1000);
             $table->foreignIdFor(Category::class)->constrained();
             $table->timestamps();
         });

@@ -26,7 +26,7 @@ class EditProductRequest extends FormRequest
 
         return [
             'nazwa' => 'required|max:50|string|unique:products,name,'.$productId,
-            'kod' => 'required|max:100|string',
+            'opis' => 'required|max:999|string',
             'zdjęcie' => 'image',
             'pdf' => 'mimes:pdf|max:4096',
             'kategoria' => 'required|integer|exists:categories,id',
